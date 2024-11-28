@@ -17,11 +17,10 @@ class Shop:
                 return file.read()
     def add(self, *products):
         existing_products = set()
-        try:
-            with open(self.__file_name, 'r') as file:
-                existing_products = {', '.join(line.split(', ')[:-1]) for line in file}
-        except FileNotFoundError:
-            pass
+    
+        with open(self.__file_name, 'r') as file:
+            existing_products = {', '.join(line.split(', ')[:-1]) for line in file}
+
 
         with open(self.__file_name, 'a') as file:
             for product in products:
