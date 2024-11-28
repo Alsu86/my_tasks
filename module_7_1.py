@@ -17,7 +17,7 @@ class Shop:
                 return file.read()
     def add(self, *products):
         existing_products = set()
-    
+
         with open(self.__file_name, 'r') as file:
             existing_products = {', '.join(line.split(', ')[:-1]) for line in file}
 
