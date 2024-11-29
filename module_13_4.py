@@ -7,7 +7,7 @@ from aiogram.fsm.state import default_state, State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import StateFilter
 
-API_TOKEN = '7969859121:AAELYRjAnRVABf1nA9k89Lp69X0MjA9Fg1w'
+API_TOKEN = ''
 
 bot = Bot(token = API_TOKEN)
 
