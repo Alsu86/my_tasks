@@ -1,0 +1,56 @@
+from aiogram import Bot, Dispatcher
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.filters.command import CommandStart
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.fsm.state import default_state, State, StatesGroup
+from aiogram.fsm.context import FSMContext
+from aiogram.filters import StateFilter
+
+API_TOKEN = ''
+
+bot = Bot(token = API_TOKEN)
+
+storage = MemoryStorage()
+dp = Dispatcher(storage = storage)
+
+class UserState (StatesGroup):
+    age = State()
+    growth = State()
+    weight = State()
+
+
+@dp.message(CommandStart(), StateFilter(default_state))
+async def start(message : Message):
+    buttons = [
+        [KeyboardButton(text = 'Рассчитать')],
+        [KeyboardButton(text = 'Информация')]
+    ]
+    keyboard = ReplyKeyboardMarkup(keyboard = buttons)
+    await  message.answer(text = 'Привет!', reply_markup = keyboard)
+@dp.message(lambda msg: msg.text == 'Рассчитать', StateFilter(default_state))
+async def set_age(message : Message, state : FSMContext):
+    await message.answer(text = 'Введите свой возраст')
+    await state.set_state(UserState.age)
+
+@dp.message(UserState.age)
+async def set_growth(message : Message, state : FSMContext):
+    await state.update_data(age = int(message.text))
+    await message.answer(text = 'Введите свой рост')
+    await state.set_state(UserState.growth)
+
+@dp.message(UserState.growth)
+async def set_weight(message : Message, state : FSMContext):
+    await state.update_data(growth = int(message.text))
+    await message.answer(text = 'Введите свой вес')
+    await  state.set_state(UserState.weight)
+
+@dp.message(UserState.weight)
+async def send_calories(message : Message, state : FSMContext):
+    await state.update_data(weight = int(message.text))
+    data = dict(await state.get_data())
+    calories = 10 * data['weight'] - 6.25 * data['growth'] - 5 * data['age'] + 5
+    await message.answer(text=f'Ваша норма калорий {calories}')
+    await state.clear()
+
+if __name__ == '__main__':
+    dp.run_polling(bot)
