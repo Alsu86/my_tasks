@@ -1,2 +1,1 @@
-        for result in cls.all_results.values():
-            print(result)
+xc_info=True
