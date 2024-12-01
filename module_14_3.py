@@ -9,7 +9,7 @@ from aiogram.filters import StateFilter
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types.input_file import FSInputFile
 
-API_TOKEN = '7969859121:AAELYRjAnRVABf1nA9k89Lp69X0MjA9Fg1w'
+API_TOKEN = ''
 
 bot = Bot(token = API_TOKEN)
 
@@ -37,9 +37,6 @@ async def start(message : Message):
     keyboard = ReplyKeyboardMarkup(keyboard = buttons)
     await  message.answer(text = 'Привет!', reply_markup = keyboard)
 
-@dp.message(CommandStart(), StateFilter(default_state))
-async def start__(message : Message):
-    await message.answer(text = 'Павыджджыаы')
 
 @dp.message(lambda msg: msg.text == 'Рассчитать', StateFilter(default_state))
 async def main_menu(message : Message):
